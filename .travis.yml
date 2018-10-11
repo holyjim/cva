@@ -1,0 +1,42 @@
+dist: trusty
+sudo: false
+
+language: node_js
+node_js:
+  - "8"
+
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
+cache:
+  directories:
+     - ./node_modules
+
+install:
+  - npm install
+
+script:
+  - npm run lint
+  - npm run ci:test
+  - npm run ci:webdriver-update
+  - npm run ci:e2e
+  - npm run ci:build
+
+after_success:
+- npm run ci:upload-coveralls
+
+deploy:
+  provider: firebase
+  token:
+    secure: "Sz4baJuVIKau8fwqmx46A2zs0CIxh3ue4TwHzVdc3ZI1/C4Bj9XHRTsBxMVJAxJ7Zqy2oRcDVVFqoJiq7ve/r21gxqjmYN48h2X6XMl6DCFUUfTClzCSlt4LvHBSxcL4nP/ihOP7tZrxrWg0tpb30rvO0Vt0BcR0HkW9sv2Vvai+A48CkQHRLfuUbIwd9iaDDFYehxkz1BlaWVVTDqAjcidCH0WAN1Jx6GyGBWVq47aU4hA6ui89OX5LeIvJAKYM4dYjZVV2EWcoO+yT5FxddD9N7m2ereebXWT7xpl2EitG4ZsOQ0ASqgOu+qVCYmoKDxVZ8cEcEDURIwlsbdaCwsVf77MLbuF+t7PjZbESF5QJkX4YqZTvaDgXOQ49LUV1G5swjSwd0/lGfEEzGlmoEDVFupRQ/sHiHhCnxYnyQKYobu+Fv+JqHg+UHQc8+NMPZfC7IWXubnDA3g4O8d73FQq8cyS5XabPHJPgWLvEcPpWqA2vr8wRYafWQV8x8FUZw10qNXMkHn7WottcTmABwixfKcLe8jnxBCGqu6G7/f+pg/YDdRYNpxPwmownv6nvRi9lN6CfbNX8Km5CAoEzUt3vLNIUIKNjiMAbFkTzUYcQZEqEjfBl06yI/Yq083CI/9Prb0vBPVcwuCAqnJRMa6bGklHLkZcPIi2GqXw2MRQ="
+  on:
+    branch: master
+
+notifications:
+  slack:
+    secure: "UvNbm3AzhmHUlq781NBvibThPXsVHOK98C3DvMbg52LlDOn7Jb2vbnIohF5aFltGRISkkmmfpm7Y7dXHYRrOFVWs0UfmWnKLzqn+nLSNOngMlvPd6iFDFZXa3SkqauPBgy/ViR0K/KgUvYI8sQbu/5b2ZpVKz9MvlGCHxG7nrIWNOkUdX7DN08h8zGdcbIXEwl45WNdbH0YoYic0JL4B6Bt3pcgugi3vahIdpIW1FK+wi3zyU2c2TWu2+C9fpq8YQJcLV4Yu+taD5UZxZh2RsIx60BL1LY0mD2D916NTpPx6VJ1MUAKIJeGBehS0eLXT+EqFhduKpw8GVd8ttUSucLoT+73FsHId9YRteE8ku96AMTifpuN7eyAFO+Ec+iFiGk4S7UwmEXGj4XZ4z/XT1KIlspC/LrpzM0N1UZP4r7CZ4Qj1gc5jaVpwg50UX00BUH1EiuobqQFZoz1tYyBRsHxRUER3j/unknBQiaSkhFFS2Da1Kldg0V/Ezs7Vk5RNEAA46UE8zU0aQm8WQG5ZQQwkeTIv9KpICzQ2JuN5K1WQBW+V9VwAhVOv0e+Wz6hVqjfbenC6w8kZ0tfW811TnMVqwkrB8m6Rb6FT12zWHXDS3tutCeJlbNa+SeXoY4fqpqD96ZZnpPNYP8nvLkC/SGzs9pt47MzPITmOwKPfhBc="
+  email: false
