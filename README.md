@@ -1,5 +1,9 @@
 # Cva
 
+[![Build Status](https://travis-ci.org/holyjim/cva.svg?branch=master)](https://travis-ci.org/holyjim/cva)
+[![Coverage Status](https://coveralls.io/repos/github/holyjim/cva/badge.svg?branch=master)](https://coveralls.io/github/holyjim/cva?branch=task%2Fsetup-code-base)
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.4.
 
 ## Development server
