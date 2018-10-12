@@ -1,7 +1,7 @@
 # Cva
 
 [![Build Status](https://travis-ci.org/holyjim/cva.svg?branch=master)](https://travis-ci.org/holyjim/cva)
-[![Coverage Status](https://coveralls.io/repos/github/holyjim/cva/badge.svg?branch=master)](https://coveralls.io/github/holyjim/cva?branch=task%2Fsetup-code-base)
+[![Coverage Status](https://coveralls.io/repos/github/holyjim/cva/badge.svg?branch=master)](https://coveralls.io/github/holyjim/cva?branch=task%2Fsetup-code-base) [![Greenkeeper badge](https://badges.greenkeeper.io/holyjim/cva.svg)](https://greenkeeper.io/)
 
 Deployed at [https://cva-prod.firebaseapp.com](https://cva-prod.firebaseapp.com)
 
