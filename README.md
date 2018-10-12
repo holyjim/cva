@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/holyjim/cva.svg?branch=master)](https://travis-ci.org/holyjim/cva)
 [![Coverage Status](https://coveralls.io/repos/github/holyjim/cva/badge.svg?branch=master)](https://coveralls.io/github/holyjim/cva?branch=task%2Fsetup-code-base)
+[![Dependency Status](https://david-dm.org/holyjim/cva.svg)](https://david-dm.org/holyjim/cva)
+[![devDependency Status](https://david-dm.org/holyjim/cva/dev-status.svg)](https://david-dm.org/holyjim/cva?type=dev)
+
+https://david-dm.org/username/repo.svg
 
 Deployed at [https://cva-prod.firebaseapp.com](https://cva-prod.firebaseapp.com)
 
