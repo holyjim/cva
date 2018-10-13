@@ -9,6 +9,6 @@ import { RegisterComponent } from './register/register.component';
     CommonModule,
     AccountsRoutingModule,
   ],
-  declarations: [RegisterComponent]
+  declarations: [RegisterComponent],
 })
 export class AccountsModule { }
