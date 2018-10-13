@@ -1,3 +1,4 @@
+import { AccountsService } from './accounts/accounts.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -21,7 +22,9 @@ import { environment } from '../environments/environment';
     BrowserAnimationsModule,
     AppMaterialModule,
   ],
-  providers: [],
+  providers: [
+    AccountsService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
