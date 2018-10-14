@@ -1,5 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Chance } from 'chance';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppMaterialModule } from '../../app.material.module';
 
 import { RegisterComponent } from './register.component';
 import { AccountsService } from '../accounts.service';
@@ -19,6 +23,11 @@ describe('RegisterComponent', () => {
         .callFake((account) => account),
     };
     TestBed.configureTestingModule({
+      imports: [
+        BrowserAnimationsModule,
+        AppMaterialModule,
+        ReactiveFormsModule,
+      ],
       declarations: [ RegisterComponent ],
       providers: [
         RegisterComponent,
