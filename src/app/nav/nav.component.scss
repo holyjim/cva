@@ -1,0 +1,30 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 250px;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+}
+
+.main-content {
+  margin: 10px;
+}
+
+.brand {
+  text-decoration: none;
+  color: #fff;
+}
+
+.horizontal-list-item {
+  float: right;
+  color: #fff;
+}
+
+.horizontal-nav-list {
+  padding-top: 0;
+}
