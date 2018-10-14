@@ -55,13 +55,13 @@ const stubAngularFireStore = (): any => {
 
   const fakeSet = (doc) => doc;
 
-  const docRefStub = {
+  const angularFSDocRefStub = {
     set: jasmine
       .createSpy('set')
       .and
       .callFake(fakeSet),
   };
-  const fakeDoc = (path) => docRefStub;
+  const fakeDoc = (path) => angularFSDocRefStub;
 
   const angularFireStoreStub = {
     doc: jasmine
@@ -69,7 +69,10 @@ const stubAngularFireStore = (): any => {
       .and
       .callFake(fakeDoc),
   };
-  return angularFireStoreStub;
+  return {
+    firestore: angularFireStoreStub,
+    docRef: angularFSDocRefStub,
+  };
 };
 
 describe('AccountsService', () => {
@@ -95,7 +98,7 @@ describe('AccountsService', () => {
       providers: [
         AccountsService,
         { provide: AngularFireAuth, useValue: afAuthStub },
-        { provide: AngularFirestore, useValue: afStoreStub },
+        { provide: AngularFirestore, useValue: afStoreStub.firestore },
       ],
     });
   });
@@ -105,7 +108,7 @@ describe('AccountsService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should register a user and return a user without password', async () => {
+  it('should register a user', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
     const account = await service.register(accountMock, password);
     const expected: Account = {
@@ -113,6 +116,13 @@ describe('AccountsService', () => {
       uid: guid,
     };
     expect(account).toEqual(expected);
+    expect(afAuthStub.auth.createUserWithEmailAndPassword).toHaveBeenCalledWith(
+      accountMock.email,
+      password
+    );
+    expect(afStoreStub.firestore.doc).toHaveBeenCalledWith(`accounts/${guid}`);
+    const callArg = afStoreStub.docRef.set.calls.argsFor(0)[0];
+    expect(callArg).toEqual(expected);
   });
 
 });
