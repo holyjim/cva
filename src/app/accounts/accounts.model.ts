@@ -1,7 +1,11 @@
 export enum Department {
-  PD = 'PD',
   Engineering = 'Enginerring',
+  Marketing = 'Marketing',
+  PD = 'PD',
   QA = 'QA',
+  Sales = 'Sales',
+  TechPubs = 'Tech Pubs',
+  UX = 'UX',
 }
 
 export enum AccountRole {
@@ -10,8 +14,9 @@ export enum AccountRole {
 }
 
 export interface Account {
-  username: string;
-  password?: string;
+  uid?: string;
+  email: string;
+  displayName: string;
   department: Department;
   role: AccountRole;
 }
