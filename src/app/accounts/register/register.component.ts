@@ -5,7 +5,7 @@ import { Department, AccountRole } from '../accounts.model';
 @Component({
   selector: 'cva-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.sass'],
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
 
