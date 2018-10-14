@@ -44,9 +44,9 @@ export class RegisterComponent implements OnInit {
   get email() { return this.registrationForm.get('email'); }
   get password() { return this.registrationForm.get('password'); }
 
-  async register(email: string) {
+  async register() {
     await this.accountsService.register({
-      email: email ? email : 'test@test.com',
+      email: this.email.value,
       displayName: 'Test',
       department: Department.QA,
       role: AccountRole.Participant,
