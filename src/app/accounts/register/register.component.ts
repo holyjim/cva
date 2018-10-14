@@ -14,8 +14,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
 
-  register(email: string) {
-    this.accountsService.register({
+  async register(email: string) {
+    await this.accountsService.register({
       email: email ? email : 'test@test.com',
       displayName: 'Test',
       department: Department.QA,
