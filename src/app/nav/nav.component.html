@@ -1,11 +1,6 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    #drawer
-    class="sidenav"
-    fixedInViewport="true"
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="!(isHandset$ | async)">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="dialog" [mode]="over" [opened]="false"
+    position="end">
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item href="#">Link 1</a>
@@ -15,24 +10,29 @@
   </mat-sidenav>
   <mat-sidenav-content fxLayout="column">
     <mat-toolbar color="primary" fxFlex="none">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
       <span>CVA</span>
+      <span fxFlex></span>
+      <div>
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <div *ngIf="!(isHandset$ | async)">
+          <mat-nav-list>
+            <a class="horizontal-list-item" mat-list-item href="#">Link 3</a>
+            <a class="horizontal-list-item" mat-list-item href="#">Link 2</a>
+            <a class="horizontal-list-item" mat-list-item href="#">Link 1</a>
+          </mat-nav-list>
+        </div>
+      </div>
     </mat-toolbar>
     <!-- Add Content Here -->
-    <div class="main-content" fxFlex="1 1 100%">
-        <ng-content></ng-content>
+    <div class="main-content" fxFlex="1 1 auto">
+      <ng-content></ng-content>
     </div>
-    <footer fxFlex="nogrow">
-        <mat-toolbar>
-          <span>Footer</span>
-        </mat-toolbar>
-      </footer>
+    <footer>
+      <mat-toolbar>
+        <span>Footer</span>
+      </mat-toolbar>
+    </footer>
   </mat-sidenav-content>
 </mat-sidenav-container>
