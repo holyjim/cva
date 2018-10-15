@@ -1,6 +1,54 @@
-<p>
-  register works!
-</p>
+<div fxFlexLayout="column" fxLayoutAlign="space-around center">
+  <mat-card  fxFlex.gt-sm="600px">
+  <mat-tab-group mat-stretch-tabs color="accent" backgroundColor="primary">
+    <mat-tab label="Register">
+      
+      <h3>New User Registration</h3>
+      <form [formGroup]="registrationForm"  (ngSubmit)="register()" fxLayout="column">
+        <mat-form-field>
+          <input matInput placeholder="Name" [class.is-danger]="displayName.invalid && displayName.dirty"
+          formControlName="displayName" required autocomplete="off">
+        </mat-form-field>
+        
+        <mat-form-field>
+          <mat-select placeholder="Department" [class.is-danger]="department.invalid && department.dirty" 
+            formControlName="department" required>
+              <mat-option *ngFor="let item of departments()" [value]="item" >
+                {{item}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+        
+        
+        <mat-form-field>
+          <input matInput type="email" placeholder="Email" [class.is-danger]="email.invalid && email.dirty"
+          formControlName="email" required autocomplete="off">
+          <mat-hint *ngIf="email.invalid && email.dirty" class="notification is-danger">
+              Your email doesn't look quite right...
+          </mat-hint>
+        </mat-form-field>
+      
+        
+        <mat-form-field>
+          <input matInput placeholder="Password" [class.is-danger]="password.invalid && password.touched"
+          formControlName="password" required>
+          <mat-hint *ngIf="password.invalid && password.touched" class="notification is-danger">
+            Password must be between 6 and 24 chars and have at least one number 
+          </mat-hint>
+        </mat-form-field>
+        
+      
+        
+      
+        <div *ngIf="registrationForm.valid" class="notification is-success">Form is valid now.</div>
+        <br/>
+      
+        <button mat-raised-button color="primary" type="submit" class="button is-primary" [disabled]="!registrationForm.valid">Submit</button>
+      
+      </form>
+    </mat-tab>
 
-<input #email placeholder="test@test.com">
-<button (click)="register(email.value)">Register</button>
+    <mat-tab label="Login"> Login </mat-tab>
+  </mat-tab-group>
+  </mat-card>
+</div>
