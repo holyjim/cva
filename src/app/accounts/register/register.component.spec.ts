@@ -59,5 +59,4 @@ describe('RegisterComponent', () => {
     });
     expect(accountsServiceStub.register.calls.argsFor(0)[1]).toEqual('password');
   });
-  
 });
