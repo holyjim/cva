@@ -59,15 +59,5 @@ describe('RegisterComponent', () => {
     });
     expect(accountsServiceStub.register.calls.argsFor(0)[1]).toEqual('password');
   });
-
-  // it('should register account with a default email', async () => {
-  //   await component.register();
-  //   expect(accountsServiceStub.register.calls.argsFor(0)[0]).toEqual({
-  //     email: 'test@test.com',
-  //     displayName: 'Test',
-  //     department: Department.QA,
-  //     role: AccountRole.Participant,
-  //   });
-  //   expect(accountsServiceStub.register.calls.argsFor(0)[1]).toEqual('password');
-  // });
+  
 });
