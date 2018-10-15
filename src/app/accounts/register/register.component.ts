@@ -10,6 +10,12 @@ import { Department, AccountRole } from '../accounts.model';
 })
 export class RegisterComponent implements OnInit {
   registrationForm: FormGroup;
+
+  // extract values
+  depts = Department;
+  departments(): Array<string> {
+    return Object.keys(this.depts);
+}
   constructor(private accountsService: AccountsService, public fb: FormBuilder) { }
 
   ngOnInit() {
