@@ -48,11 +48,11 @@ describe('RegisterComponent', () => {
   });
 
   it('should register account with a given email', async () => {
-    //generate data
+    // generate data
     const email = chance.email();
     const displayName = chance.name();
-    const dept = Department[chance.pickone(Object.keys(Department))]; 
-    //fill the form values
+    const dept = Department[chance.pickone(Object.keys(Department))];
+    // fill the form values
     component.email.setValue(email);
     component.displayName.setValue(displayName);
     component.department.setValue(dept);
