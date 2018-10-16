@@ -26,7 +26,7 @@ export class AccountsService {
     return account;
   }
 
-  async login(username: string, password: string) {
+  async login(email: string, password: string) {
 
   }
 }
