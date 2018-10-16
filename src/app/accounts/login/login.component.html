@@ -10,8 +10,8 @@
 
 
   <mat-form-field>
-    <input matInput placeholder="Password" [class.is-danger]="password.invalid && password.touched" formControlName="password"
-      required>
+      <input matInput type="password" placeholder="Password" [class.is-danger]="password.invalid && password.touched"
+        formControlName="password" required>
   </mat-form-field>
 
   <button mat-raised-button color="primary" type="submit" class="button is-primary" [disabled]="!loginForm.valid">Submit</button>
