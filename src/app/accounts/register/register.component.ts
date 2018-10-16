@@ -53,8 +53,8 @@ export class RegisterComponent implements OnInit {
   async register() {
     await this.accountsService.register({
       email: this.email.value,
-      displayName: 'Test',
-      department: Department.QA,
+      displayName: this.displayName.value,
+      department: this.department.value,
       role: AccountRole.Participant,
     }, 'password');
   }

@@ -49,12 +49,16 @@ describe('RegisterComponent', () => {
 
   it('should register account with a given email', async () => {
     const email = chance.email();
+    const displayName = chance.name();
     component.email.setValue(email);
+    component.displayName.setValue(displayName);
+    component.department.setValue(Department.PD);
+
     await component.register();
     expect(accountsServiceStub.register.calls.argsFor(0)[0]).toEqual({
       email: email,
-      displayName: 'Test',
-      department: Department.QA,
+      displayName: displayName,
+      department: Department.PD,
       role: AccountRole.Participant,
     });
     expect(accountsServiceStub.register.calls.argsFor(0)[1]).toEqual('password');
