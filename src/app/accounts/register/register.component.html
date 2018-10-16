@@ -30,18 +30,13 @@
       
         
         <mat-form-field>
-          <input matInput placeholder="Password" [class.is-danger]="password.invalid && password.touched"
+          <input matInput type="password" placeholder="Password" [class.is-danger]="password.invalid && password.touched"
           formControlName="password" required>
           <mat-hint *ngIf="password.invalid && password.touched" class="notification is-danger">
             Password must be between 6 and 24 chars and have at least one number 
           </mat-hint>
         </mat-form-field>
         
-      
-        
-      
-        <div *ngIf="registrationForm.valid" class="notification is-success">Form is valid now.</div>
-        <br/>
       
         <button mat-raised-button color="primary" type="submit" class="button is-primary" [disabled]="!registrationForm.valid">Submit</button>
       
