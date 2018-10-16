@@ -40,9 +40,6 @@ export class RegisterComponent implements OnInit {
         Validators.maxLength(25),
         ],
       ],
-      'region': ['', [
-        ],
-      ],
     });
   }
   get displayName() { return this.registrationForm.get('displayName'); }
