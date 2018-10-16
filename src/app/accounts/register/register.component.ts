@@ -40,9 +40,6 @@ export class RegisterComponent implements OnInit {
         Validators.maxLength(25),
         ],
       ],
-      'region': ['', [
-        ],
-      ],
     });
   }
   get displayName() { return this.registrationForm.get('displayName'); }
@@ -53,8 +50,8 @@ export class RegisterComponent implements OnInit {
   async register() {
     await this.accountsService.register({
       email: this.email.value,
-      displayName: 'Test',
-      department: Department.QA,
+      displayName: this.displayName.value,
+      department: this.department.value,
       role: AccountRole.Participant,
     }, 'password');
   }
