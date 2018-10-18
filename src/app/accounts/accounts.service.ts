@@ -62,12 +62,10 @@ export class AccountsService {
       return;
     }
     // redirect to somewhere
-    console.log('logged in!');
   }
 
   // If error, console log and notify user
   private handleError(error) {
-    console.error(error)
     this.notify.update('Error', error.message, 'error')
   }
 }
