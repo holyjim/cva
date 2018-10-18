@@ -6,6 +6,8 @@ import { Chance } from 'chance';
 import { AccountsService } from './accounts.service';
 import { BehaviorSubject } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import { AppMaterialModule } from '../app.material.module';
 
 
 const stubAngularFireAuth = (accountMock, guid): any => {
@@ -82,7 +84,7 @@ describe('AccountsService', () => {
   let afAuthStub: any;
   let afStoreStub: any;
   let guid: string;
-
+  let router: any;
   beforeEach(() => {
     password = chance.word();
     accountMock = {
@@ -94,9 +96,13 @@ describe('AccountsService', () => {
     guid = chance.guid();
     afAuthStub = stubAngularFireAuth(accountMock, guid);
     afStoreStub = stubAngularFireStore();
+    router = {
+      navigate: jasmine.createSpy('navigate');
+    }
     TestBed.configureTestingModule({
       providers: [
         AccountsService,
+        { provide: Router, useValue: router },
         { provide: AngularFireAuth, useValue: afAuthStub },
         { provide: AngularFirestore, useValue: afStoreStub.firestore },
       ],
