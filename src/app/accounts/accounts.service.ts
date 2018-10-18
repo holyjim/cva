@@ -35,7 +35,7 @@ export class AccountsService {
     return accountRef.set(account, { merge: true });
   }
 
-  async register(account: Account, password: string): Promise<Account> {
+  async register(account: Account, password: string): Promise<void> {
     // try to create a user
     try {
       const credential = await this.afAuth.auth.createUserWithEmailAndPassword(
@@ -50,24 +50,23 @@ export class AccountsService {
     
     try {
       await this.updateAccount(account);
-      return account;
+      // redirect to somewhere
+      this.router.navigate(['/']);
     } catch (error) {
       this.handleError(error);
       return;
     }
-    // redirect to somewhere
-    this.router.navigate(['/']);
   }
 
   async login(email: string, password: string) {
     try {
       await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+      // redirect to somewhere
+      this.router.navigate(['/']);
     } catch (error) {
       this.handleError(error);
       return;
     }
-    // redirect to somewhere
-    this.router.navigate(['/']);
   }
 
   // If error, console log and notify user
