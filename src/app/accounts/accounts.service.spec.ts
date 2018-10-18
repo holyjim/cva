@@ -4,7 +4,7 @@ import { Account, Department, AccountRole } from './accounts.model';
 import { Chance } from 'chance';
 
 import { AccountsService } from './accounts.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AppMaterialModule } from '../app.material.module';
@@ -81,6 +81,10 @@ describe('AccountsService', () => {
   const chance = Chance();
   let password: string;
   let accountMock: Account;
+  let accountMockBadEmail: Account;
+  let accountMockBadPassword: Account;
+  let accountMockBadDepartment: Account;
+  let accountMockBadRole: Account;
   let afAuthStub: any;
   let afStoreStub: any;
   let guid: string;
@@ -89,6 +93,12 @@ describe('AccountsService', () => {
     password = chance.word();
     accountMock = {
       email: chance.email(),
+      displayName: chance.word(),
+      department: Department[chance.pickone(Object.keys(Department))],
+      role: AccountRole[chance.pickone(Object.keys(AccountRole))],
+    };
+    accountMockBadEmail = {
+      email: 'bad',
       displayName: chance.word(),
       department: Department[chance.pickone(Object.keys(Department))],
       role: AccountRole[chance.pickone(Object.keys(AccountRole))],
@@ -116,12 +126,15 @@ describe('AccountsService', () => {
 
   it('should register a user', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
-    const account = await service.register(accountMock, password);
+    await service.register(accountMock, password);
     const expected: Account = {
       ... accountMock,
       uid: guid,
     };
-    expect(account).toEqual(expected);
+    let account: Observable<Account>;
+    account = service.account;
+
+    // expect(account).toEqual(expected);
     expect(afAuthStub.auth.createUserWithEmailAndPassword).toHaveBeenCalledWith(
       accountMock.email,
       password
@@ -129,11 +142,26 @@ describe('AccountsService', () => {
     expect(afStoreStub.firestore.doc).toHaveBeenCalledWith(`accounts/${guid}`);
     const callArg = afStoreStub.docRef.set.calls.argsFor(0)[0];
     expect(callArg).toEqual(expected);
+
+    expect(router.navigate).toHaveBeenCalledWith(['/']);
   });
 
   it('should login a user', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
     service.login(accountMock.email, password);
+
+    expect(afAuthStub.auth.signInWithEmailAndPassword).toHaveBeenCalledWith(
+      accountMock.email,
+      password
+    );
+
+
+    // expect(router.navigate).toHaveBeenCalledWith(['/']);
   });
+
+  it('should handle bad email errors', () => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    service.register(accountMockBadEmail, password);
+  })
 
 });
