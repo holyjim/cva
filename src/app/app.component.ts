@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NotifyService } from './core/notify.service';
 
 @Component({
   selector: 'cva-root',
@@ -6,4 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  constructor(public notify: NotifyService) { }
 }
