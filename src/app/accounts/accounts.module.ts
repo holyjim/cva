@@ -7,6 +7,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AccountsRoutingModule } from './accounts-routing.module';
 import { RegisterComponent } from './register/register.component';
+import { AccountsComponent } from './accounts/accounts.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   imports: [
@@ -16,6 +18,6 @@ import { RegisterComponent } from './register/register.component';
     FlexLayoutModule,
     ReactiveFormsModule,
   ],
-  declarations: [RegisterComponent],
+  declarations: [RegisterComponent, AccountsComponent, LoginComponent],
 })
 export class AccountsModule { }

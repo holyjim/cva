@@ -125,4 +125,9 @@ describe('AccountsService', () => {
     expect(callArg).toEqual(expected);
   });
 
+  it('should login a user', async () => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    service.login(accountMock.email, password);
+  });
+
 });

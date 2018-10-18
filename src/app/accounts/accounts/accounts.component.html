@@ -1,0 +1,11 @@
+<div fxFlexLayout="column" fxLayoutAlign="space-around center">
+  <mat-card fxFlex.gt-sm="600px" fxFlex="100%">
+    <nav class="tab-header" mat-tab-nav-bar mat-stretch-tabs>
+      <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        {{link.label}}
+      </a>
+    </nav>
+    <router-outlet></router-outlet>
+  </mat-card>
+</div>
