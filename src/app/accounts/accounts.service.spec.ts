@@ -97,7 +97,7 @@ describe('AccountsService', () => {
     afAuthStub = stubAngularFireAuth(accountMock, guid);
     afStoreStub = stubAngularFireStore();
     router = {
-      navigate: jasmine.createSpy('navigate');
+      navigate: jasmine.createSpy('navigate'),
     }
     TestBed.configureTestingModule({
       providers: [
