@@ -45,7 +45,6 @@ export class ProfileComponent implements OnInit {
 
   get displayName() { return this.profileForm.get('displayName'); }
   get department() { return this.profileForm.get('department'); }
-  get email() { return this.profileForm.get('email'); }
 
   async update(uid, email, role) {
     await this.accountsService.updateAccount({
