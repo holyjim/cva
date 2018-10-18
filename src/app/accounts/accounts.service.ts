@@ -1,4 +1,5 @@
-import { Account } from './accounts.model';
+import { from } from 'rxjs';
+import { Account, Department, AccountRole } from './accounts.model';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
@@ -7,6 +8,14 @@ import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firest
   providedIn: 'root',
 })
 export class AccountsService {
+
+  public account = from([{
+    uid: 'asdfasdfadf',
+    displayName: 'Test Name',
+    email: 'test@email.com',
+    department: Department.QA,
+    role: AccountRole.Participant,
+  }]);
 
   constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) { }
 
