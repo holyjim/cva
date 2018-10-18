@@ -6,6 +6,7 @@ import { NotifyService } from '../core/notify.service';
 
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class AccountsService {
 
   constructor(private afAuth: AngularFireAuth, 
               private afs: AngularFirestore,
+              private router: Router,
               private notify: NotifyService) { 
     this.account = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -51,7 +53,10 @@ export class AccountsService {
       return account;
     } catch (error) {
       this.handleError(error);
+      return;
     }
+    // redirect to somewhere
+    this.router.navigate(['/']);
   }
 
   async login(email: string, password: string) {
@@ -62,6 +67,7 @@ export class AccountsService {
       return;
     }
     // redirect to somewhere
+    this.router.navigate(['/']);
   }
 
   // If error, console log and notify user
