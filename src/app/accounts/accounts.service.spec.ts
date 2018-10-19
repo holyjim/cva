@@ -78,21 +78,13 @@ const stubAngularFireStore = (): any => {
   };
 };
 
-const stubNotifyService = (): any => {
-
-  const fakeUpdate = (title, content, style): void => { 
-    update: jasmine
-      .createSpy('blahblah')
-  }
-};
-
 describe('AccountsService', () => {
   const chance = Chance();
   let password: string;
   let accountMock: Account;
   let afAuthStub: any;
   let afStoreStub: any;
-  let notifyStub: any;
+  let notifyServiceStub: any;
   let guid: string;
   let router: any;
   beforeEach(() => {
@@ -108,14 +100,20 @@ describe('AccountsService', () => {
     afStoreStub = stubAngularFireStore();
     router = {
       navigate: jasmine.createSpy('navigate'),
-    }
+    };
+    notifyServiceStub = {
+      update: jasmine
+        .createSpy('update')
+        .and
+        .callFake((title, content, style): void => {}),
+    };
     TestBed.configureTestingModule({
       providers: [
         AccountsService,
         { provide: Router, useValue: router },
         { provide: AngularFireAuth, useValue: afAuthStub },
         { provide: AngularFirestore, useValue: afStoreStub.firestore },
-        { provide: NotifyService, useValue: stubNotifyService },
+        { provide: NotifyService, useValue: notifyServiceStub },
       ],
     });
   });
@@ -158,12 +156,12 @@ describe('AccountsService', () => {
     // expect(router.navigate).toHaveBeenCalledWith(['/']);
   });
 
-  it('should handle bad email and/or password', async () => {
+  it('should handle bad email and/or password for login', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
-    afAuthStub.createUserWithEmailAndPassword.and.throwError(new Error('Test Error'));
+    afAuthStub.auth.signInWithEmailAndPassword.and.throwError(new Error('Test Error'));
     service.login(accountMock.email, password);
 
-    expect(notifyStub.update).toHaveBeenCalledWith(
+    expect(notifyServiceStub.update).toHaveBeenCalledWith(
       'Error',
       'Test Error',
       'error'
