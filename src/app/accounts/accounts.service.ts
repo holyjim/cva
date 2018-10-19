@@ -15,19 +15,19 @@ export class AccountsService {
 
   account: Observable<Account>;
 
-  constructor(private afAuth: AngularFireAuth, 
+  constructor(private afAuth: AngularFireAuth,
               private afs: AngularFirestore,
               private router: Router,
-              private notify: NotifyService) { 
+              private notify: NotifyService) {
     this.account = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          return this.afs.doc<Account>(`accounts/${user.uid}`).valueChanges()
+          return this.afs.doc<Account>(`accounts/${user.uid}`).valueChanges();
         } else {
           return of(null);
         }
       })
-    )
+    );
   }
 
   async updateAccount(account: Account) {
@@ -47,7 +47,7 @@ export class AccountsService {
       this.handleError(error);
       return;
     }
-    
+
     try {
       await this.updateAccount(account);
       // redirect to somewhere
@@ -71,6 +71,6 @@ export class AccountsService {
 
   // If error, console log and notify user
   private handleError(error) {
-    this.notify.update('Error', error.message, 'error')
+    this.notify.update('Error', error.message, 'error');
   }
 }
