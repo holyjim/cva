@@ -156,7 +156,7 @@ describe('AccountsService', () => {
     // expect(router.navigate).toHaveBeenCalledWith(['/']);
   });
 
-  it('should handle bad email and/or password for login', async () => {
+  it('should handle firebase login error', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
     afAuthStub.auth.signInWithEmailAndPassword.and.throwError(new Error('Test Error'));
     service.login(accountMock.email, password);
