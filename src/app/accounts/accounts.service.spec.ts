@@ -169,4 +169,17 @@ describe('AccountsService', () => {
     );
   });
 
+  it('should handle firebase register error', async () => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    const error = new Error(chance.word());
+    afAuthStub.auth.createUserWithEmailAndPassword.and.throwError(error);
+    service.register(accountMock, password);
+
+    expect(notifyServiceStub.update).toHaveBeenCalledWith(
+      'Error',
+      error.message,
+      'error'
+    );
+  });
+
 });
