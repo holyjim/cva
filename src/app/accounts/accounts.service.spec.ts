@@ -158,12 +158,13 @@ describe('AccountsService', () => {
 
   it('should handle firebase login error', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
-    afAuthStub.auth.signInWithEmailAndPassword.and.throwError(new Error('Test Error'));
+    const error = new Error(chance.word());
+    afAuthStub.auth.signInWithEmailAndPassword.and.throwError(error);
     service.login(accountMock.email, password);
 
     expect(notifyServiceStub.update).toHaveBeenCalledWith(
       'Error',
-      'Test Error',
+      error.message,
       'error'
     );
   });
