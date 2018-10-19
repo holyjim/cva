@@ -8,6 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AppMaterialModule } from '../app.material.module';
+import { NotifyService } from '../core/notify.service';
 
 
 const stubAngularFireAuth = (accountMock, guid): any => {
@@ -77,28 +78,27 @@ const stubAngularFireStore = (): any => {
   };
 };
 
+const stubNotifyService = (): any => {
+
+  const fakeUpdate = (title, content, style): void => { 
+    update: jasmine
+      .createSpy('blahblah')
+  }
+};
+
 describe('AccountsService', () => {
   const chance = Chance();
   let password: string;
   let accountMock: Account;
-  let accountMockBadEmail: Account;
-  let accountMockBadPassword: Account;
-  let accountMockBadDepartment: Account;
-  let accountMockBadRole: Account;
   let afAuthStub: any;
   let afStoreStub: any;
+  let notifyStub: any;
   let guid: string;
   let router: any;
   beforeEach(() => {
     password = chance.word();
     accountMock = {
       email: chance.email(),
-      displayName: chance.word(),
-      department: Department[chance.pickone(Object.keys(Department))],
-      role: AccountRole[chance.pickone(Object.keys(AccountRole))],
-    };
-    accountMockBadEmail = {
-      email: 'bad',
       displayName: chance.word(),
       department: Department[chance.pickone(Object.keys(Department))],
       role: AccountRole[chance.pickone(Object.keys(AccountRole))],
@@ -115,6 +115,7 @@ describe('AccountsService', () => {
         { provide: Router, useValue: router },
         { provide: AngularFireAuth, useValue: afAuthStub },
         { provide: AngularFirestore, useValue: afStoreStub.firestore },
+        { provide: NotifyService, useValue: stubNotifyService },
       ],
     });
   });
@@ -154,14 +155,19 @@ describe('AccountsService', () => {
       accountMock.email,
       password
     );
-
-
     // expect(router.navigate).toHaveBeenCalledWith(['/']);
   });
 
-  it('should handle bad email errors', () => {
+  it('should handle bad email and/or password', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
-    service.register(accountMockBadEmail, password);
-  })
+    afAuthStub.createUserWithEmailAndPassword.and.throwError(new Error('Test Error'));
+    service.login(accountMock.email, password);
+
+    expect(notifyStub.update).toHaveBeenCalledWith(
+      'Error',
+      'Test Error',
+      'error'
+    );
+  });
 
 });
