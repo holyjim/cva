@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs'
+import { Subject } from 'rxjs';
 
 export interface Msg {
   title: string;
@@ -8,7 +8,7 @@ export interface Msg {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotifyService {
 
@@ -23,6 +23,6 @@ export class NotifyService {
     this._msgSource.next(msg);
   }
   clear() {
-    this._msgSource.next(null)
+    this._msgSource.next(null);
   }
 }

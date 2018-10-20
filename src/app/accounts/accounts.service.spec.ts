@@ -191,7 +191,7 @@ describe('AccountsService', () => {
   it('should handle updating account error', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
     const error = new Error(chance.word());
-    
+
     afStoreStub.docRef.set.and.throwError(error);
     service.register(accountMock, password);
 

@@ -13,9 +13,9 @@ export class LandingComponent implements OnInit {
 
   account$: Observable<Account>;
 
-  constructor(private accountsService: AccountsService) { 
+  constructor(private accountsService: AccountsService) {
     this.account$ = accountsService.account;
-    
+
 
   }
 

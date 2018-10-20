@@ -17,7 +17,7 @@ describe('NotifyService', () => {
     title = chance.string();
     content = chance.string();
     style = chance.string();
-    TestBed.configureTestingModule({})
+    TestBed.configureTestingModule({});
   });
 
   it('should be created', () => {
