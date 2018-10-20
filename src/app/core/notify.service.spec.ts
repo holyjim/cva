@@ -36,8 +36,6 @@ describe('NotifyService', () => {
   it('should clear the message', () => {
     const service: NotifyService = TestBed.get(NotifyService);
     service.clear();
-    service.msg.subscribe( result => {
-      expect(result).toBeNull;
-    });
+    service.msg.subscribe((result) => expect(result).toBeNull);
   });
 });
