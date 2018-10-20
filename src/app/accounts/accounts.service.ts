@@ -30,11 +30,6 @@ export class AccountsService {
     );
   }
 
-  async updateAccount(account: Account) {
-    const accountRef: AngularFirestoreDocument<any> = this.afs.doc(`accounts/${account.uid}`);
-    return accountRef.set(account, { merge: true });
-  }
-
   async register(account: Account, password: string): Promise<void> {
     // try to create a user
     try {
@@ -72,5 +67,11 @@ export class AccountsService {
   // If error, console log and notify user
   private handleError(error) {
     this.notify.update('Error', error.message, 'error');
+  }
+
+
+  private async updateAccount(account: Account) {
+    const accountRef: AngularFirestoreDocument<any> = this.afs.doc(`accounts/${account.uid}`);
+    return accountRef.set(account, { merge: true });
   }
 }

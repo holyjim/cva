@@ -103,7 +103,7 @@ describe('AccountsService', () => {
     };
     notifyServiceStub = {
       update: jasmine
-        .createSpy('update')
+        .createSpy('notifyServiceSpy')
         .and
         .callFake((title, content, style): void => {}),
     };
@@ -116,6 +116,11 @@ describe('AccountsService', () => {
         { provide: NotifyService, useValue: notifyServiceStub },
       ],
     });
+  });
+
+  it('should map a user', async () => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    expect(service.account).toBeTruthy();
   });
 
   it('should be created', () => {
@@ -172,6 +177,7 @@ describe('AccountsService', () => {
   it('should handle firebase register error', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
     const error = new Error(chance.word());
+
     afAuthStub.auth.createUserWithEmailAndPassword.and.throwError(error);
     service.register(accountMock, password);
 
@@ -180,6 +186,20 @@ describe('AccountsService', () => {
       error.message,
       'error'
     );
+  });
+
+  it('should handle updating account error', async () => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    const error = new Error(chance.word());
+    
+    afStoreStub.docRef.set.and.throwError(error);
+    service.register(accountMock, password);
+
+    // expect(notifyServiceStub.update).toHaveBeenCalledWith(
+    //   'Error',
+    //   error.message,
+    //   'error'
+    // );
   });
 
 });
