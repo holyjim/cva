@@ -1,10 +1,11 @@
+import { take } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { TestBed } from '@angular/core/testing';
 import { Account, Department, AccountRole } from './accounts.model';
 import { Chance } from 'chance';
 
 import { AccountsService } from './accounts.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AppMaterialModule } from '../app.material.module';
@@ -48,21 +49,27 @@ const stubAngularFireAuth = (accountMock, guid): any => {
         .and
         .callFake(fakeSignOutHandler),
     },
+    credentialsMock: credentialsMock,
   };
 
   return angularFireAuthStub;
 
 };
 
-const stubAngularFireStore = (): any => {
+const stubAngularFireStore = (accountMock): any => {
 
   const fakeSet = (doc) => doc;
+  const fakeValueChange = () => of(accountMock);
 
   const angularFSDocRefStub = {
     set: jasmine
       .createSpy('set')
       .and
       .callFake(fakeSet),
+    valueChanges: jasmine
+      .createSpy('valueChanges')
+      .and
+      .callFake(fakeValueChange),
   };
   const fakeDoc = (path) => angularFSDocRefStub;
 
@@ -97,7 +104,7 @@ describe('AccountsService', () => {
     };
     guid = chance.guid();
     afAuthStub = stubAngularFireAuth(accountMock, guid);
-    afStoreStub = stubAngularFireStore();
+    afStoreStub = stubAngularFireStore(accountMock);
     router = {
       navigate: jasmine.createSpy('navigate'),
     };
@@ -202,4 +209,33 @@ describe('AccountsService', () => {
     // );
   });
 
+  it('should handle an authState change with user', (done) => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    // Since the service instantiate creates a null state first, ignore that
+    let ignoreFirst = true;
+    service.account.pipe(take(2)).subscribe((account) => {
+      if (ignoreFirst) {
+        ignoreFirst = false;
+        return;
+      }
+      expect(account).toEqual(accountMock);
+      done();
+    });
+    afAuthStub.authState.next(afAuthStub.credentialsMock);
+  });
+
+  it('should handle an authState change with no user', (done) => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    // Since the service instantiate creates a null state first, ignore that
+    let ignoreFirst = true;
+    service.account.pipe(take(2)).subscribe((account) => {
+      if (ignoreFirst) {
+        ignoreFirst = false;
+        return;
+      }
+      expect(account).toBeNull();
+      done();
+    });
+    afAuthStub.authState.next(null);
+  });
 });
