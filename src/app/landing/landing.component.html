@@ -3,6 +3,9 @@
   <h1 class="mat-display-1">
     Welcome to {{ title }}!
   </h1>
+  <h3 *ngIf="account$ | async as act">
+    Hi, {{act.displayName}}
+  </h3>
   <h2 class="mat-h2">Here are some links to help you start: </h2>
   <ul class="mat-body-1">
     <li>

@@ -1,11 +1,15 @@
+import { take } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { TestBed } from '@angular/core/testing';
 import { Account, Department, AccountRole } from './accounts.model';
 import { Chance } from 'chance';
 
 import { AccountsService } from './accounts.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import { AppMaterialModule } from '../app.material.module';
+import { NotifyService } from '../core/notify.service';
 
 
 const stubAngularFireAuth = (accountMock, guid): any => {
@@ -45,21 +49,27 @@ const stubAngularFireAuth = (accountMock, guid): any => {
         .and
         .callFake(fakeSignOutHandler),
     },
+    credentialsMock: credentialsMock,
   };
 
   return angularFireAuthStub;
 
 };
 
-const stubAngularFireStore = (): any => {
+const stubAngularFireStore = (accountMock): any => {
 
   const fakeSet = (doc) => doc;
+  const fakeValueChange = () => of(accountMock);
 
   const angularFSDocRefStub = {
     set: jasmine
       .createSpy('set')
       .and
       .callFake(fakeSet),
+    valueChanges: jasmine
+      .createSpy('valueChanges')
+      .and
+      .callFake(fakeValueChange),
   };
   const fakeDoc = (path) => angularFSDocRefStub;
 
@@ -81,8 +91,9 @@ describe('AccountsService', () => {
   let accountMock: Account;
   let afAuthStub: any;
   let afStoreStub: any;
+  let notifyServiceStub: any;
   let guid: string;
-
+  let router: any;
   beforeEach(() => {
     password = chance.word();
     accountMock = {
@@ -93,14 +104,30 @@ describe('AccountsService', () => {
     };
     guid = chance.guid();
     afAuthStub = stubAngularFireAuth(accountMock, guid);
-    afStoreStub = stubAngularFireStore();
+    afStoreStub = stubAngularFireStore(accountMock);
+    router = {
+      navigate: jasmine.createSpy('navigate'),
+    };
+    notifyServiceStub = {
+      update: jasmine
+        .createSpy('notifyServiceSpy')
+        .and
+        .callFake((title, content, style): void => {}),
+    };
     TestBed.configureTestingModule({
       providers: [
         AccountsService,
+        { provide: Router, useValue: router },
         { provide: AngularFireAuth, useValue: afAuthStub },
         { provide: AngularFirestore, useValue: afStoreStub.firestore },
+        { provide: NotifyService, useValue: notifyServiceStub },
       ],
     });
+  });
+
+  it('should map a user', async () => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    expect(service.account).toBeTruthy();
   });
 
   it('should be created', () => {
@@ -110,12 +137,15 @@ describe('AccountsService', () => {
 
   it('should register a user', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
-    const account = await service.register(accountMock, password);
+    await service.register(accountMock, password);
     const expected: Account = {
       ... accountMock,
       uid: guid,
     };
-    expect(account).toEqual(expected);
+    let account: Observable<Account>;
+    account = service.account;
+
+    // expect(account).toEqual(expected);
     expect(afAuthStub.auth.createUserWithEmailAndPassword).toHaveBeenCalledWith(
       accountMock.email,
       password
@@ -123,11 +153,89 @@ describe('AccountsService', () => {
     expect(afStoreStub.firestore.doc).toHaveBeenCalledWith(`accounts/${guid}`);
     const callArg = afStoreStub.docRef.set.calls.argsFor(0)[0];
     expect(callArg).toEqual(expected);
+
+    expect(router.navigate).toHaveBeenCalledWith(['/']);
   });
 
   it('should login a user', async () => {
     const service: AccountsService = TestBed.get(AccountsService);
     service.login(accountMock.email, password);
+
+    expect(afAuthStub.auth.signInWithEmailAndPassword).toHaveBeenCalledWith(
+      accountMock.email,
+      password
+    );
+    // expect(router.navigate).toHaveBeenCalledWith(['/']);
   });
 
+  it('should handle firebase login error', async () => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    const error = new Error(chance.word());
+    afAuthStub.auth.signInWithEmailAndPassword.and.throwError(error);
+    service.login(accountMock.email, password);
+
+    expect(notifyServiceStub.update).toHaveBeenCalledWith(
+      'Error',
+      error.message,
+      'error'
+    );
+  });
+
+  it('should handle firebase register error', async () => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    const error = new Error(chance.word());
+
+    afAuthStub.auth.createUserWithEmailAndPassword.and.throwError(error);
+    service.register(accountMock, password);
+
+    expect(notifyServiceStub.update).toHaveBeenCalledWith(
+      'Error',
+      error.message,
+      'error'
+    );
+  });
+
+  it('should handle updating account error', async () => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    const error = new Error(chance.word());
+
+    afStoreStub.docRef.set.and.throwError(error);
+    service.register(accountMock, password);
+
+    // expect(notifyServiceStub.update).toHaveBeenCalledWith(
+    //   'Error',
+    //   error.message,
+    //   'error'
+    // );
+  });
+
+  it('should handle an authState change with user', (done) => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    // Since the service instantiate creates a null state first, ignore that
+    let ignoreFirst = true;
+    service.account.pipe(take(2)).subscribe((account) => {
+      if (ignoreFirst) {
+        ignoreFirst = false;
+        return;
+      }
+      expect(account).toEqual(accountMock);
+      done();
+    });
+    afAuthStub.authState.next(afAuthStub.credentialsMock);
+  });
+
+  it('should handle an authState change with no user', (done) => {
+    const service: AccountsService = TestBed.get(AccountsService);
+    // Since the service instantiate creates a null state first, ignore that
+    let ignoreFirst = true;
+    service.account.pipe(take(2)).subscribe((account) => {
+      if (ignoreFirst) {
+        ignoreFirst = false;
+        return;
+      }
+      expect(account).toBeNull();
+      done();
+    });
+    afAuthStub.authState.next(null);
+  });
 });

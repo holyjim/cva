@@ -1,14 +1,41 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LandingComponent } from './landing.component';
+import { Department, AccountRole, Account } from '../accounts/accounts.model';
+import { Chance } from 'chance';
+import { from } from 'rxjs';
+import { AccountsService } from '../accounts/accounts.service';
+
 
 describe('LandingComponent', () => {
+  const chance = Chance();
   let component: LandingComponent;
   let fixture: ComponentFixture<LandingComponent>;
 
+  let accountsServiceStub: any;
+  let accountMock: Account;
+
   beforeEach(async(() => {
+    accountMock = {
+      uid: chance.guid(),
+      email: chance.email(),
+      displayName: chance.word(),
+      department: Department[chance.pickone(Object.keys(Department))],
+      role: AccountRole[chance.pickone(Object.keys(AccountRole))],
+    };
+    accountsServiceStub = {
+      updateAccount: jasmine
+        .createSpy('updateAccount')
+        .and
+        .callFake(() => {}),
+      account: from([accountMock]),
+    };
     TestBed.configureTestingModule({
       declarations: [ LandingComponent ],
+      providers: [
+        LandingComponent,
+        { provide: AccountsService, useValue: accountsServiceStub },
+      ],
     })
     .compileComponents();
   }));
