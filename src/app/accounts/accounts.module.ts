@@ -9,6 +9,7 @@ import { AccountsRoutingModule } from './accounts-routing.module';
 import { RegisterComponent } from './register/register.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { LoginComponent } from './login/login.component';
     FlexLayoutModule,
     ReactiveFormsModule,
   ],
-  declarations: [RegisterComponent, AccountsComponent, LoginComponent],
+  declarations: [RegisterComponent, AccountsComponent, LoginComponent, ProfileComponent],
 })
 export class AccountsModule { }

@@ -1,0 +1,30 @@
+<h2 class="mat-display-2">Profile</h2>
+<form [formGroup]="profileForm" *ngIf="account$ | async as account" (ngSubmit)="update(account.uid, account.email, account.role)" fxLayout="column"  >
+
+  <mat-form-field>
+      <input matInput type="email" placeholder="Email" formControlName="email" required>
+  </mat-form-field>
+
+
+  <mat-form-field>
+      <input matInput placeholder="Role" formControlName="role" required>
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <input matInput placeholder="Name" [class.is-danger]="displayName.invalid && displayName.dirty" formControlName="displayName"
+      required autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Department" [class.is-danger]="department.invalid && department.dirty" formControlName="department"
+      required>
+      <mat-option *ngFor="let item of departments()" [value]="item">
+        {{item}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" class="button is-primary" [disabled]="!profileForm.valid">Update</button>
+
+</form>

@@ -1,4 +1,5 @@
-import { Account } from './accounts.model';
+import { from } from 'rxjs';
+import { Account, Department, AccountRole } from './accounts.model';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
@@ -12,6 +13,14 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AccountsService {
+
+//   public account = from([{
+//     uid: 'asdfasdfadf',
+//     displayName: 'Test Name',
+//     email: 'test@email.com',
+//     department: Department.QA,
+//     role: AccountRole.Participant,
+//   }]);
 
   account: Observable<Account>;
 
@@ -70,7 +79,7 @@ export class AccountsService {
   }
 
 
-  private async updateAccount(account: Account) {
+  async updateAccount(account: Account) {
     const accountRef: AngularFirestoreDocument<any> = this.afs.doc(`accounts/${account.uid}`);
     return accountRef.set(account, { merge: true });
   }
