@@ -79,7 +79,7 @@ export class AccountsService {
   }
 
 
-  private async updateAccount(account: Account) {
+  async updateAccount(account: Account) {
     const accountRef: AngularFirestoreDocument<any> = this.afs.doc(`accounts/${account.uid}`);
     return accountRef.set(account, { merge: true });
   }
